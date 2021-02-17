@@ -32,7 +32,7 @@ class TDDFA(object):
 
         # load BFM
         self.bfm = BFMModel(
-            bfm_fp=kvs.get('bfm_fp', make_abs_path('configs/bfm_noneck_v3.pkl')),
+            bfm_fp=kvs.get('bfm_fp', make_abs_path('./configs/bfm_noneck_v3.pkl')),
             shape_dim=kvs.get('shape_dim', 40),
             exp_dim=kvs.get('exp_dim', 10)
         )
@@ -44,7 +44,7 @@ class TDDFA(object):
         self.size = kvs.get('size', 120)
 
         param_mean_std_fp = kvs.get(
-            'param_mean_std_fp', make_abs_path(f'configs/param_mean_std_62d_{self.size}x{self.size}.pkl')
+            'param_mean_std_fp', make_abs_path(f'./configs/param_mean_std_62d_{self.size}x{self.size}.pkl')
         )
 
         # load model, default output is dimension with length 62 = 12(pose) + 40(shape) +10(expression)

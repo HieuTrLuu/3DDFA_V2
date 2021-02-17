@@ -15,6 +15,19 @@ from TDDFA import TDDFA
 from utils.render import render
 # from utils.render_ctypes import render
 from utils.functions import cv_draw_landmark
+import torch
+from BlazeFace.blazeface import BlazeFace
+def setup_face_detection():
+	device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+	net = BlazeFace().to(device)
+	net.load_weights("BlazeFace/blazeface.pth")
+	net.load_anchors("BlazeFace/anchors.npy")
+	# Optionally change the thresholds:
+	net.min_score_thresh = 0.75
+	net.min_suppression_threshold = 0.3
+	return net
+
+fa_detection = setup_face_detection()
 
 
 def main(args):
@@ -55,7 +68,8 @@ def main(args):
 
         if i == 0:
             # the first frame, detect face, here we only use the first face, you can change depending on your need
-            boxes = face_boxes(frame_bgr)
+            # boxes = face_boxes(frame_bgr)
+            boxes = fa_detection(frame_bgr)
             boxes = [boxes[0]]
             param_lst, roi_box_lst = tddfa(frame_bgr, boxes)
             ver = tddfa.recon_vers(param_lst, roi_box_lst, dense_flag=dense_flag)[0]
